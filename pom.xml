@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.4.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>lt.arvydas</groupId>
+	<artifactId>KawaWebTest</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>KawaWebTest</name>
+	<description>Demo project for Spring Boot</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>gnu</groupId>
+			<artifactId>kawa</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>compile</id>
+						<phase>compile</phase>
+						<configuration>
+							<target>
+								<property name="compile_classpath" refid="maven.compile.classpath"/>
+								<property name="runtime_classpath" refid="maven.runtime.classpath"/>
+								<property name="test_classpath" refid="maven.test.classpath"/>
+								<property name="plugin_classpath" refid="maven.plugin.classpath"/>
+								<echo message="Compiling Kawa sources"/>
+								<path id="kawa.sources">
+									<fileset dir="src/main/kawa" includes="*.scm"/>
+								</path>
+								<java classname="kawa.repl" 
+										fork="true"
+										failonerror="true"
+										dir="src/main/kawa">
+									<arg line="-d ${project.build.outputDirectory}"/>
+									<arg value="-C"/>
+									<arg pathref="kawa.sources"/>
+									<classpath>
+										<pathelement path="${compile_classpath}"/>
+									</classpath>
+								</java>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+	</build>
+
+</project>
