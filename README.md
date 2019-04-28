@@ -20,3 +20,6 @@ launch
 ```
 mvn spring-boot:run
 ```
+
+Look at the result
+http://localhost:8080/mandelbrot.svg
